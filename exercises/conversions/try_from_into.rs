@@ -11,33 +11,66 @@ struct Color {
     blue: u8,
 }
 
-// I AM NOT DONE
 
 // Your task is to complete this implementation
 // and return an Ok result of inner type Color.
-// You need to create an implementation for a tuple of three integers,
-// an array of three integers and a slice of integers.
+// You need create implementation for a tuple of three integer,
+// an array of three integer and slice of integer.
 //
-// Note that the implementation for tuple and array will be checked at compile time,
-// but the slice implementation needs to check the slice length!
-// Also note that correct RGB color values must be integers in the 0..=255 range.
+// Note, that implementation for tuple and array will be checked at compile-time,
+// but slice implementation need check slice length!
+// Also note, that chunk of correct rgb color must be integer in range 0..=255.
 
 // Tuple implementation
 impl TryFrom<(i16, i16, i16)> for Color {
     type Error = String;
-    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {}
+    fn try_from(tuple: (i16, i16, i16)) -> Result<Self, Self::Error> {
+        let rgb = (u8::try_from(tuple.0), u8::try_from(tuple.1), u8::try_from(tuple.2));
+        match (rgb) {
+            (Ok(r), Ok(g), Ok(b)) => Ok(Color { red:r, green:g, blue:b }),
+            (_, _, _) => Err(String::from("Invalid color"))
+        }
+    }
 }
 
 // Array implementation
 impl TryFrom<[i16; 3]> for Color {
     type Error = String;
-    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {}
+    fn try_from(arr: [i16; 3]) -> Result<Self, Self::Error> {
+        let rgb = (u8::try_from(arr[0]), u8::try_from(arr[1]), u8::try_from(arr[2]));
+        match (rgb) {
+            (Ok(r), Ok(g), Ok(b)) => Ok(Color { red:r, green:g, blue:b }),
+            (_, _, _) => Err(String::from("Invalid color"))
+        }
+        
+        // An alternative:
+        //Color::try_from((arr[0], arr[1], arr[2]))
+    }
 }
 
 // Slice implementation
 impl TryFrom<&[i16]> for Color {
     type Error = String;
-    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {}
+    fn try_from(slice: &[i16]) -> Result<Self, Self::Error> {
+        if slice.len() != 3 
+           || slice[0] < 0 || slice[0] > 255
+           || slice[1] < 0 || slice[1] > 255
+           || slice[2] < 0 || slice[2] > 255 {
+            Err(String::from("Invalid color"))
+        }
+        else {
+            Ok(Color {
+                red: u8::try_from(slice[0]).unwrap(),
+                green: u8::try_from(slice[1]).unwrap(),
+                blue: u8::try_from(slice[2]).unwrap(),
+            })
+        }
+        // An alternative:
+        //match slice.len() {
+        //    3 => Color::try_from((slice[0], slice[1], slice[2])),
+        //    _ => Err(String::from("Invalid color"))
+        //}
+    }
 }
 
 fn main() {
@@ -88,19 +121,20 @@ mod tests {
     }
     #[test]
     fn test_array_out_of_range_positive() {
-        let c: Result<Color, String> = [1000, 10000, 256].try_into();
+        let c: Result<Color, _> = [1000, 10000, 256].try_into();
         assert!(c.is_err());
     }
     #[test]
     fn test_array_out_of_range_negative() {
-        let c: Result<Color, String> = [-10, -256, -1].try_into();
+        let c: Result<Color, _> = [-10, -256, -1].try_into();
         assert!(c.is_err());
     }
     #[test]
     fn test_array_sum() {
-        let c: Result<Color, String> = [-1, 255, 255].try_into();
+        let c: Result<Color, _> = [-1, 255, 255].try_into();
         assert!(c.is_err());
     }
+    #[test]
     #[test]
     fn test_array_correct() {
         let c: Result<Color, String> = [183, 65, 14].try_into();

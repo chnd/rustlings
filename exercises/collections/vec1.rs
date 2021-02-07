@@ -4,11 +4,10 @@
 // Make me compile and pass the test!
 // Execute the command `rustlings hint collections1` if you need hints.
 
-// I AM NOT DONE
 
 fn array_and_vec() -> ([i32; 4], Vec<i32>) {
     let a = [10, 20, 30, 40]; // a plain array
-    let v = // TODO: declare your vector here with the macro for vectors
+    let v = vec![a[0], a[1], a[2], a[3]];
 
     (a, v)
 }
@@ -20,6 +19,6 @@ mod tests {
     #[test]
     fn test_array_and_vec_similarity() {
         let (a, v) = array_and_vec();
-        assert_eq!(a, v[..]);
+        assert!(a.iter().zip(v.iter()).all(|(x, y)| x == y));
     }
 }
