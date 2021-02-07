@@ -1,3 +1,12 @@
+# This repository contains fork from rustlings excercise with answers.
+(take a look at the exercise folders).
+
+If you are looking for the rustlings repository instead, please visit https://github.com/rust-lang/rustlings.
+
+The following contains the original README.md text from the rustlings repository.
+---
+
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-75-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
